@@ -1,0 +1,34 @@
+var directoryURL = [[[doc fileURL] path] stringByDeletingLastPathComponent];
+var fileName = [[[[doc fileURL] path] lastPathComponent] stringByDeletingPathExtension];
+var pdf = [[PDFDocument alloc] init];
+
+for (var i=0; i<[[doc currentPage] artboards].count(); i++) 
+{
+	var artboard = [[doc currentPage] artboards][i];
+	if ([artboard isSelected]){
+		var filePath = directoryURL + "/" + fileName +"_tmp_pdf_creation_" + i + ".png";
+		print(filePath);
+		[doc saveArtboardOrSlice:artboard toFile:filePath];
+		var image = [[NSImage alloc] initByReferencingFile:filePath];
+		print(image);
+		var page = [[PDFPage alloc] initWithImage:image];
+		[pdf insertPage:page atIndex:[pdf pageCount]];
+
+         if ([[NSFileManager defaultManager] isDeletableFileAtPath:filePath]) {
+            BOOL success = [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+         	if (!success) {
+           		print("Error removing file at path" + filePath);
+         	}
+		}
+	}
+}	
+
+print([pdf pageCount]);
+var app = [NSApplication sharedApplication];
+if([pdf pageCount]){
+	[pdf writeToFile: directoryURL + "/" + fileName + ".pdf"];
+	[app displayDialog:"A PDF document has been created." withTitle:"Success!"];
+} 
+else	{
+	[app displayDialog:"Please select at least one artboard." withTitle:"Hint:"];
+}
