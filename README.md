@@ -1,10 +1,17 @@
 # sketch-plugin-PDF-exporter
 PDF Exporter plugin for Sketch
 
+Instructions:
+- install plugin
+- select Artboards
+- Plugins->Export Selected Artboards to PDF
+
+
 This is a work in progress.
 - no sandbox support yet.
 - export to file-directory + "yourfilename".pdf only
 - no error handling
+- exports only artboards of selected page
 
 Roadmap:
 - fix above issues
